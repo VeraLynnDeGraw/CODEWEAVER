@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# ==============================================================================
+# CODEWEAVER CLI WRAPPER & AUTO-LAUNCHER
+# ==============================================================================
+set -e
+
+# Establish path references relative to this file's workspace root
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BINARY_PATH="$ROOT_DIR/dist/codeweaver"
+
+# 1. Automagic Compilation Guard Rail
+if [ ! -f "$BINARY_PATH" ]; then
+    echo -e "\033[33m⚙️  First-time launch detected. Compiling core binary via PyInstaller...\033[0m"
+    
+    # Ensure dependencies exist in the current environment context
+    if ! command -v pyinstaller &> /dev/null; then
+        echo -e "\033[31m❌ Error: pyinstaller is not installed in this environment.\033[0m"
+        echo -e "Please run: pip install -r requirements.txt"
+        exit 1
+    fi
+    
+    # Run the compiler silently from the root
+    (cd "$ROOT_DIR" && pyinstaller --onefile src/main.py --name codeweaver > /dev/null)
+    echo -e "\033[32m✨ Build Complete! Standalone binary established at dist/codeweaver\033[0m\n"
+fi
+
+# 2. Transparent Argument Forwarding Engine
+# Forwards all folder paths, --json tokens, or help flags natively to the binary
+exec "$BINARY_PATH" "$@"

@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "codeweaver": {
+      "command": "/home/vlsa10011/CODEWEAVER/dist/codeweaver",
+      "args": ["--json"],
+      "env": {},
+      "tools": [
+        {
+          "name": "analyze_project_structure",
+          "description": "Deterministic, read-only scanning system for software codebases. Inspects layout directory paths, isolates project type certainty from inference, extracts configuration manifests, and registers strict provenance logs for Python and Node.js environments.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "The absolute or relative directory path of the target software application workspace to analyze."
+              }
+            },
+            "required": ["path"]
+          }
+        }
+      ]
+    }
+  }
+}

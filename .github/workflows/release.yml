@@ -1,0 +1,41 @@
+name: "CODEWEAVER Autonomous Binary Pipeline"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: "ubuntu-latest"
+    name: "Compile Target Standalone Matrix Build"
+    
+    steps:
+      - name: "Checkout Target Workspace Source Tree"
+        uses: actions/checkout@v4
+
+      - name: "Provision Pipeline Python Runtime Isolation"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: "Inject Core System Tool Dependencies"
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: "Invoke Standalone Compiler Engine Run"
+        run: |
+          pyinstaller --onefile src/main.py --name codeweaver
+
+      - name: "Publish Production Standalone Artifact Release"
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "dist/codeweaver"
+          body: "Official standalone platform executable binary drop for CODEWEAVER Alpha.1 Project Understanding."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

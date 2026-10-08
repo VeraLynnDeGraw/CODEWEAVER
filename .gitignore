@@ -1,0 +1,16 @@
+# Python bytecode and caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Environments
+.venv/
+env/
+venv/
+
+# Compiler build artifacts
+build/
+dist/
+*.spec
